@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nova-X Banking - Dashboard</title>
+    <link rel="stylesheet" href="/dashboard/CSS/dashboard.css">
+    
+    <!-- Ionicons -->
+    <script type="module" src="https://cdn.jsdelivr.net/npm/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://cdn.jsdelivr.net/npm/ionicons@7.1.0/dist/ionicons/ionicons.js"></script> 
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- jQuery MaskMoney -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery-maskmoney@3.0.2/dist/jquery.maskMoney.min.js"></script>
+    <!-- Gráficos Apexcharts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.45.0/apexcharts.min.js"></script>
+</head>
+<body>
+
+    <!-- TELA DE CARREGAMENTO -->
+    <div id="loading-screen">
+        <div class="loading-content">
+            <h1>Carregando Nova-X...</h1>
+            <div class="spinner"></div>
+            <div id="loading-text">Conectando com blockchain...</div>
+        </div>
+    </div>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <div id="main-content">
+        
+        <!-- HEADER -->
+        <header>
+            <div class="header-left">
+                <div class="logo-container">
+                    <img src="/LogoFundo1.png" alt="Logo Nova-X" class="logo-img">
+                </div>
+                <div class="header-info">
+                    <h1>Nova-X Banking</h1>
+                    <p class="header-subtitle">Seu futuro financeiro</p>
+                </div>
+            </div>
+            <nav class="menu-opcoes">
+                <a onclick="reloadWithLoading()">
+                    <ion-icon name="home"></ion-icon>
+                    Início
+                </a>
+                <!-- <a href="#" onclick="openProfileModal()">
+                    <ion-icon name="person"></ion-icon>
+                    Perfil
+                </a> -->
+                <a style="visibility: hidden;">
+                    <div class="user-info" onclick="openProfileModal()" style="visibility: visible;">
+                        <div class="user-avatar" id="user-avatar"></div>
+                        <span id="userName"></span>
+                    </div>
+                </a>
+                <a onclick="logout()" class="logout-btn">
+                    <ion-icon name="log-out"></ion-icon>
+                    Sair
+                </a>
+            </nav>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main>
+            
+            <!-- DASHBOARD CARDS -->
+            <section class="dashboard-grid">
+                <!-- Carteira Nova-X -->
+                <div class="saldo-container card-gradient-nvx" onclick="openReverseConversionModal()">
+                    <div class="card-header-row">
+                        <span class="card-icon"><ion-icon name="diamond"></ion-icon></span>
+                        <h2>Carteira Nova-X</h2>
+                    </div>
+                    <div class="card-balance-section">
+                        <div class="balance-main">
+                            <span class="saldo-valor" id="saldoValor"></span>
+                            <span class="balance-currency">NVX</span>
+                        </div>
+                        <div class="saldo-convertido" id="saldoConvertido"></div>
+                    </div>
+                    <div class="price-info-box">
+                        <div class="price-left">
+                            <span class="price-label">Preço atual</span>
+                            <span class="price-value" id="nvxPrice"></span>
+                        </div>
+                        <div class="price-change price-up" id="priceChangePercent">
+                            <ion-icon name="trending-up"></ion-icon>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Carteira em Reais -->
+                <div class="carteira-reais-container card-gradient-brl" onclick="openConversionModal()">
+                    <div class="card-header-row">
+                        <span class="card-icon"><ion-icon name="card"></ion-icon></span>
+                        <h2>Carteira em Reais</h2>
+                    </div>
+                    <div class="card-balance-section">
+                        <div class="saldo-reais" id="saldoReais">R$ 0,00</div>
+                        <div class="saldo-convertido">Conta Corrente Digital</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AÇÕES RÁPIDAS -->
+            <section class="quick-actions">
+                <button class="action-btn" onclick="openTransferModal()">
+                    <div class="action-icon-box">
+                        <span class="action-icon"><ion-icon name="swap-horizontal"></ion-icon></span>
+                    </div>
+                    <span class="action-text">Transferir</span>
+                </button>
+                <button class="action-btn" onclick="openPaymentModal()">
+                    <div class="action-icon-box">
+                        <span class="action-icon"><ion-icon name="card-outline"></ion-icon></span>
+                    </div>
+                    <span class="action-text">Pagar</span>
+                </button>
+                <button class="action-btn" onclick="openPixModal()">
+                    <div class="action-icon-box">
+                        <span class="action-icon"><ion-icon name="flash"></ion-icon></span>
+                    </div>
+                    <span class="action-text">PIX</span>
+                </button>
+            </section>
+
+            <!-- TRANSAÇÕES -->
+            <section class="transactions-section">
+                <div class="transactions-header">
+                    <div class="section-title-container">
+                        <span class="section-icon"><ion-icon name="list"></ion-icon></span>
+                        <h2>Últimas Transações</h2>
+                    </div>
+                    <button class="refresh-btn" onclick="refreshTransactions()">
+                        <ion-icon name="refresh"></ion-icon>
+                        Atualizar
+                    </button>
+                </div>
+                <div id="transactionsList">
+                    <div class="empty-state">
+                        <span class="empty-icon"><ion-icon name="receipt-outline"></ion-icon></span>
+                        <p class="empty-text">Nenhuma transação ainda</p>
+                        <p class="empty-subtext">Realize uma operação para ver o histórico aqui</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- GRÁFICO DE PERFORMANCE -->
+            <section class="chart-container">
+                <div class="chart-header">
+                    <div class="section-title-container">
+                        <span class="section-icon"><ion-icon name="trending-up"></ion-icon></span>
+                        <h2>Performance Nova-X</h2>
+                    </div>
+                    <div class="time-selector">
+                        <button class="time-btn active" onclick="changeChartPeriod('1D', event)">1D</button>
+                        <button class="time-btn" onclick="changeChartPeriod('1W', event)">1S</button>
+                        <button class="time-btn" onclick="changeChartPeriod('1M', event)">1M</button>
+                        <button class="time-btn" onclick="changeChartPeriod('1Y', event)">1A</button>
+                    </div>
+                </div>
+                <div id="chartContainer"></div>
+            </section>
+            
+        </main>
+    </div>
+
+    <!-- MODAIS -->
+
+    <!-- Modal de Conversão (BRL → NVX) -->
+    <div class="modal" id="conversionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title-container">
+                    <span class="modal-icon"><ion-icon name="swap-horizontal"></ion-icon></span>
+                    <h2>Converter Reais → NVX</h2>
+                </div>
+                <button class="close-btn" onclick="closeConversionModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="conversionAmount">Valor em Reais (R$)</label>
+                    <input type="text" 
+                        id="conversionAmount" 
+                        placeholder="R$ 0,00" 
+                        oninput="calculateConversion()" 
+                        required>
+                </div>
+                <div class="conversion-info">
+                    <div class="info-row">
+                        <span>Taxa de conversão:</span>
+                        <span id="conversionRateBRL"><strong>0,33 NVX por R$ 1</strong></span>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="info-row">
+                        <span>Você receberá:</span>
+                        <span id="nvxReceived" class="highlight-value"><strong>0,00 NVX</strong></span>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="info-row">
+                        <span>Saldo em Reais atual:</span>
+                        <span id="currentRealBalance"><strong>R$ 10.000,00</strong></span>
+                    </div>
+                </div>
+                <button type="button" 
+                        class="submit-btn" 
+                        id="convertBtn" 
+                        onclick="performConversion()" 
+                        disabled>
+                    <ion-icon name="checkmark-circle"></ion-icon>
+                    Realizar Conversão
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Conversão Reversa (NVX → BRL) -->
+    <div class="modal" id="reverseConversionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title-container">
+                    <span class="modal-icon"><ion-icon name="swap-horizontal"></ion-icon></span>
+                    <h2>Converter NVX → Reais</h2>
+                </div>
+                <button class="close-btn" onclick="closeReverseConversionModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="reverseConversionAmount">Valor em Nova-X (NVX)</label>
+                    <input type="text" 
+                        id="reverseConversionAmount" 
+                        placeholder="NVX 0,00" 
+                        oninput="calculateReverseConversion()" 
+                        required>
+                </div>
+                <div class="conversion-info">
+                    <div class="info-row">
+                        <span>Taxa de conversão:</span>
+                        <span id="conversionRateNVX"><strong>R$ 3,00 por NVX</strong></span>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="info-row">
+                        <span>Você receberá:</span>
+                        <span id="reaisReceived" class="highlight-value"><strong>R$ 0,00</strong></span>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="info-row">
+                        <span>Saldo em NVX atual:</span>
+                        <span id="currentNVXBalance"><strong>5.230,75 NVX</strong></span>
+                    </div>
+                </div>
+                <button type="button" 
+                        class="submit-btn" 
+                        id="reverseConvertBtn" 
+                        onclick="performReverseConversion()" 
+                        disabled>
+                    <ion-icon name="checkmark-circle"></ion-icon>
+                    Realizar Conversão
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Transferência -->
+    <div class="modal" id="transferModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title-container">
+                    <span class="modal-icon"><ion-icon name="swap-horizontal"></ion-icon></span>
+                    <h2>Central de Transferências</h2>
+                </div>
+                <button class="close-btn" onclick="closeTransferModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Tabs de Seleção -->
+                <div class="tab-container">
+                    <button class="tab-btn active" onclick="showTransferOption('deposit')">
+                        <span class="tab-icon"><ion-icon name="cash"></ion-icon></span>
+                        Depositar
+                    </button>
+                    <button class="tab-btn" onclick="showTransferOption('send')">
+                        <span class="tab-icon"><ion-icon name="send"></ion-icon></span>
+                        Transferir NVX
+                    </button>
+                </div>
+                
+                <!-- Formulário Depósito -->
+                <div id="depositForm">
+                    <div class="form-group">
+                        <label for="depositAmount">Valor do Depósito (R$)</label>
+                        <input type="text" 
+                            id="depositAmount" 
+                            placeholder="R$ 0,00" 
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="depositMethod">Método de Depósito</label>
+                        <select id="depositMethod" required>
+                            <option value="">Selecione o método</option>
+                            <option value="pix">PIX</option>
+                            <option value="ted">TED</option>
+                        </select>
+                    </div>
+                    <div class="info-banner">
+                        <span class="banner-icon"><ion-icon name="information-circle"></ion-icon></span>
+                        <p>Depósitos via PIX são processados instantaneamente!</p>
+                    </div>
+                    <button type="button" class="submit-btn" onclick="performDeposit()">
+                        <ion-icon name="checkmark-circle"></ion-icon>
+                        Realizar Depósito
+                    </button>
+                </div>
+
+                <!-- Formulário Transferência NVX -->
+                <div id="sendNVXForm">
+                    <div class="form-group">
+                        <label for="recipientAddress">Destinatário</label>
+                        <input type="text" 
+                            id="recipientAddress" 
+                            placeholder="Email, CPF ou chave Nova-X" 
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="nvxTransferAmount">Valor em NVX</label>
+                        <input type="text" 
+                            id="nvxTransferAmount" 
+                            placeholder="NVX 0,00" 
+                            oninput="calculateTransferFee()" 
+                            required>
+                    </div>
+                    <div class="conversion-info">
+                        <div class="info-row">
+                            <span>Valor a transferir:</span>
+                            <span id="transferValue"><strong>0,00 NVX</strong></span>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="info-row">
+                            <span>Taxa:</span>
+                            <span id="transferFee"><strong>0,00 NVX</strong></span>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="info-row">
+                            <span>Total a debitar:</span>
+                            <span id="totalTransfer" class="highlight-value"><strong>0,00 NVX</strong></span>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="info-row">
+                            <span>Saldo disponível:</span>
+                            <span id="availableNVX"><strong>5.230,75 NVX</strong></span>
+                        </div>
+                    </div>
+                    <button type="button" 
+                            class="submit-btn" 
+                            id="nvxTransferBtn" 
+                            onclick="performNVXTransfer()" 
+                            disabled>
+                        <ion-icon name="checkmark-circle"></ion-icon>
+                        Confirmar Transferência
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Pagamento -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title-container">
+                    <span class="modal-icon"><ion-icon name="card"></ion-icon></span>
+                    <h2>Pagamentos Nova-X</h2>
+                </div>
+                <button class="close-btn" onclick="closeModal('paymentModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="paymentType">Tipo de Pagamento</label>
+                    <select id="paymentType" onchange="updatePaymentForm()" required>
+                        <option value="">Selecione o tipo</option>
+                        <option value="boleto">Boleto Bancário</option>
+                        <option value="fatura">Fatura de Cartão</option>
+                        <option value="servico">Serviços (Netflix, Spotify, etc.)</option>
+                        <option value="comercio">Comércio/Loja</option>
+                    </select>
+                </div>
+                
+                <div id="paymentDetails">
+                    <div class="form-group">
+                        <label for="paymentCode">Código/Linha Digitável</label>
+                        <input type="text" 
+                            id="paymentCode" 
+                            placeholder="Digite o código do pagamento">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="paymentAmount">Valor a Pagar</label>
+                        <input type="text" 
+                            id="paymentAmount" 
+                            placeholder="R$ 0,00" 
+                            oninput="validatePayment()">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="currency-label">Escolha a forma de pagamento:</label>
+                        <div class="currency-selection">
+                            <div class="currency-option" id="realOption" onclick="selectCurrency('BRL')">
+                                <span class="currency-icon"><ion-icon name="cash"></ion-icon></span>
+                                <div class="currency-title">Reais (BRL)</div>
+                                <div class="currency-balance">Disponível: R$ <span id="realBalance">10.000,00</span></div>
+                            </div>
+                            <div class="currency-option selected" id="nvxOption" onclick="selectCurrency('NVX')">
+                                <span class="currency-icon"><ion-icon name="diamond"></ion-icon></span>
+                                <div class="currency-title">Nova-X (NVX)</div>
+                                <div class="currency-balance">Disponível: <span id="nvxBalance">5.230,75</span> NVX</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="conversion-info" id="paymentInfo">
+                        <div class="info-row">
+                            <span>Valor do pagamento:</span>
+                            <span id="paymentValue"><strong>R$ 0,00</strong></span>
+                        </div>
+                        <div class="info-row" id="nvxConversionRow">
+                            <span>Equivalente em NVX:</span>
+                            <span id="paymentNVXValue"><strong>0,00 NVX</strong></span>
+                        </div>
+                        <div class="info-row" id="feeRow">
+                            <span>Taxa de processamento:</span>
+                            <span id="processingFee"><strong>0,5% (mín. 0.10 NVX)</strong></span>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="info-row">
+                            <span>Total a debitar:</span>
+                            <span id="paymentTotal" class="highlight-value"><strong>0,00 NVX</strong></span>
+                        </div>
+                    </div>
+                    
+                    <div id="balanceWarning" class="balance-warning">
+                        <span class="warning-icon"><ion-icon name="warning"></ion-icon></span>
+                        <p>Saldo insuficiente na moeda selecionada!</p>
+                    </div>
+                    
+                    <button type="button" 
+                            class="submit-btn" 
+                            id="paymentBtn" 
+                            onclick="processPayment()" 
+                            disabled>
+                        <ion-icon name="checkmark-circle"></ion-icon>
+                        Realizar Pagamento
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal PIX -->
+    <div class="modal" id="pixModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title-container">
+                    <span class="modal-icon"><ion-icon name="flash"></ion-icon></span>
+                    <h2>PIX Nova-X</h2>
+                </div>
+                <button class="close-btn" onclick="closeModal('pixModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Tabs PIX -->
+                <div class="tab-container">
+                    <button class="tab-btn active" onclick="showPixOption('send')">
+                        <span class="tab-icon"><ion-icon name="send"></ion-icon></span>
+                        Enviar PIX
+                    </button>
+                </div>
+                
+                <!-- Enviar PIX -->
+                <div id="pixSendForm">
+                    <div class="form-group">
+                        <label for="pixKey">Chave PIX do Destinatário</label>
+                        <input type="text" 
+                            id="pixKey" 
+                            placeholder="CPF, Email, Telefone ou Chave Aleatória">
+                    </div>
+                    <div class="form-group">
+                        <label for="pixAmount">Valor</label>
+                        <input type="text" 
+                            id="pixAmount" 
+                            placeholder="R$ 0,00" 
+                            oninput="validatePixSend()">
+                    </div>
+                    <button type="button" 
+                            class="submit-btn" 
+                            id="pixSendBtn" 
+                            onclick="sendPix()" 
+                            disabled>
+                        <ion-icon name="flash"></ion-icon>
+                        Enviar PIX
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Perfil -->
+    <div class="modal" id="profileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title-container">
+                    <span class="modal-icon"><ion-icon name="person"></ion-icon></span>
+                    <h2>Perfil</h2>
+                </div>
+                <button class="close-btn" onclick="closeModal('profileModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="profileName">Nome Completo</label>
+                    <input type="text" id="profileName" placeholder="Seu nome">
+                </div>
+                <div class="form-group">
+                    <label for="profileEmail">Email</label>
+                    <input type="email" id="profileEmail" placeholder="seuemail@exemplo.com">
+                </div>
+                <div class="form-group">
+                    <label for="profilePhone">Telefone</label>
+                    <input type="text" id="profilePhone" placeholder="(XX) XXXXX-XXXX">
+                </div>
+                <button class="submit-btn" onclick="saveProfile()">
+                    <ion-icon name="checkmark-circle"></ion-icon>
+                    Salvar Alterações
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Comprovante -->
+    <div class="modal" id="receiptModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title-container">
+                    <span class="modal-icon"><ion-icon name="receipt"></ion-icon></span>
+                    <h2>Comprovante</h2>
+                </div>
+                <button class="close-btn" onclick="closeModal('receiptModal')">&times;</button>
+            </div>
+            
+            <div class="receipt-container">
+                <div class="receipt-header">
+                    <div class="receipt-logo">NX</div>
+                    <h3>Nova-X Banking</h3>
+                    <p>Comprovante de Transação</p>
+                </div>
+                
+                <div class="receipt-status">
+                    <div class="status-icon"><ion-icon name="checkmark-circle"></ion-icon></div>
+                    <div class="status-text">Transação Concluída</div>
+                </div>
+                
+                <div class="receipt-details">
+                    <div class="receipt-row">
+                        <span class="receipt-label">Tipo:</span>
+                        <span class="receipt-value" id="receiptType">-</span>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="receipt-row">
+                        <span class="receipt-label">Data e Hora:</span>
+                        <span class="receipt-value" id="receiptDateTime">-</span>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="receipt-row">
+                        <span class="receipt-label">Valor:</span>
+                        <span class="receipt-value highlight" id="receiptAmount">-</span>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="receipt-row">
+                        <span class="receipt-label">Moeda:</span>
+                        <span class="receipt-value" id="receiptCurrency">-</span>
+                    </div>
+                    <div class="receipt-row" id="receiptDestinationRow">
+                        <span class="receipt-label">Destinatário:</span>
+                        <span class="receipt-value" id="receiptDestination">-</span>
+                    </div>
+                    <div class="receipt-row" id="receiptTaxRow">
+                        <span class="receipt-label">Taxa:</span>
+                        <span class="receipt-value" id="receiptTax">-</span>
+                    </div>
+                </div>
+                
+                <div class="receipt-footer">
+                    <div class="transaction-id">ID: <span id="receiptTransactionId">-</span></div>
+                    <p class="receipt-disclaimer">
+                        Este comprovante é válido como documento fiscal eletrônico
+                    </p>
+                </div>
+                
+                <div class="receipt-actions">
+                    <button class="receipt-btn" onclick="downloadReceipt()">
+                        <ion-icon name="download"></ion-icon> Baixar PDF
+                    </button>
+                    <button class="receipt-btn secondary" onclick="shareReceipt()">
+                        <ion-icon name="share-social"></ion-icon> Compartilhar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- Modal de Boas-vindas e Termos NVX -->
+<div class="modal" id="nvxTermsModal">
+    <div class="modal-content nvx-terms-modal">
+        <button class="close-btn-terms" onclick="fecharTermosSemAceitar()">&times;</button>
+        
+        <div class="modal-header terms-header">
+            <div class="terms-icon-container">
+                <ion-icon name="diamond" class="terms-icon"></ion-icon>
+            </div>
+            <h2>Bem-vindo à Nova-X!</h2>
+            <p class="terms-subtitle">Sua carteira de criptomoedas</p>
+        </div>
+        
+        <div class="modal-body terms-body">
+            <div class="welcome-message">
+                <div class="welcome-icon-box">
+                    <ion-icon name="rocket"></ion-icon>
+                </div>
+                <h3>Parabéns!</h3>
+                <p>Você está prestes a começar sua jornada no mundo das criptomoedas com a <strong>Nova-X (NVX)</strong>.</p>
+            </div>
+            
+        <div class="terms-scroll">
+            <p><strong>1. Sobre a Nova-X (NVX)</strong></p>
+            <p>A Nova-X (NVX) é uma criptomoeda descentralizada baseada em tecnologia blockchain, desenvolvida para proporcionar transações digitais rápidas, seguras e transparentes. Nossa rede utiliza criptografia avançada e mecanismos de consenso distribuído para garantir a integridade e a imutabilidade de todas as operações realizadas na blockchain.</p>
+
+            <p><strong>2. Responsabilidade do Usuário</strong></p>
+            <p>Você é o único e exclusivo responsável pela guarda e proteção de suas credenciais de acesso, incluindo CPF, senha e chaves privadas. A Nova-X não tem acesso às suas chaves privadas e, portanto, não pode recuperar fundos em caso de perda de credenciais. Recomendamos fortemente o uso de senhas fortes e o armazenamento seguro e offline de suas informações de acesso.</p>
+
+            <p><strong>3. Irreversibilidade das Transações</strong></p>
+            <p>Todas as transações processadas na blockchain da Nova-X são permanentes e irreversíveis após a confirmação. Antes de confirmar qualquer operação, verifique cuidadosamente todos os dados, incluindo o endereço do destinatário, o valor e a taxa de transação. Uma vez confirmada, a transação não poderá ser cancelada, revertida ou modificada sob nenhuma circunstância.</p>
+
+            <p><strong>4. Segurança e Proteção de Dados</strong></p>
+            <p>A segurança de sua conta é fundamental. Nunca compartilhe sua senha, códigos de verificação ou chaves privadas com terceiros, incluindo pessoas que afirmem representar a equipe de suporte. A Nova-X jamais solicitará suas credenciais completas por e-mail, telefone ou mensagem. Mantenha seu dispositivo protegido, utilize antivírus atualizado e evite acessar sua conta em redes Wi-Fi públicas ou computadores compartilhados.</p>
+
+            <p><strong>5. Uso Responsável e Legalidade</strong></p>
+            <p>Ao utilizar a plataforma Nova-X, você concorda em agir de acordo com todas as leis e regulamentações aplicáveis em sua jurisdição. É expressamente proibido o uso da plataforma para atividades ilegais, incluindo, mas não se limitando a: lavagem de dinheiro, financiamento de atividades ilícitas, fraude, evasão fiscal ou qualquer outra conduta criminosa. A Nova-X reserva-se o direito de suspender ou encerrar contas que violem estes termos.</p>
+
+            <p><strong>6. Mineração e Recompensas</strong></p>
+            <p>A Nova-X oferece oportunidades de mineração nas quais os usuários podem contribuir com poder computacional para validar transações e criar novos blocos na rede. As recompensas de mineração são distribuídas automaticamente conforme as regras de consenso da rede. O valor das recompensas pode variar conforme a dificuldade da rede, o número de mineradores ativos e outras condições técnicas do sistema.</p>
+
+            <p><strong>7. Atualizações e Modificações</strong></p>
+            <p>A Nova-X reserva-se o direito de atualizar, modificar ou revisar estes Termos de Uso a qualquer momento, a fim de refletir mudanças em nossa plataforma, requisitos legais ou práticas operacionais. É de responsabilidade do usuário revisar periodicamente os termos atualizados. O uso continuado da plataforma após quaisquer alterações constitui a aceitação dos novos termos. Recomendamos que você verifique esta página regularmente para se manter informado sobre atualizações.</p>
+
+            <p><strong>8. Riscos e Volatilidade</strong></p>
+            <p>Criptomoedas são ativos voláteis cujo valor pode flutuar significativamente em curtos períodos de tempo. Você reconhece e aceita os riscos inerentes ao investimento em criptomoedas, incluindo a possibilidade de perda parcial ou total do capital investido. A Nova-X não oferece garantias quanto ao valor futuro da moeda ou ao retorno de investimentos.</p>
+
+            <p><strong>9. Limitação de Responsabilidade</strong></p>
+            <p>A Nova-X não se responsabiliza por perdas decorrentes de falhas técnicas, interrupções de serviço, ataques cibernéticos, erros de usuário, perda de credenciais ou quaisquer outros eventos fora de nosso controle razoável. Embora adotemos as melhores práticas de segurança disponíveis, nenhum sistema é 100% imune a riscos.</p>
+
+            <p><strong>10. Taxas e Comissões</strong></p>
+            <p>Algumas operações na plataforma podem estar sujeitas a taxas de rede (gas fees) e comissões de serviço. Todas as taxas serão claramente exibidas antes da confirmação de qualquer transação. As taxas podem variar de acordo com o congestionamento da rede e a complexidade da operação.</p>
+
+            <p><strong>11. Suporte ao Cliente</strong></p>
+            <p>Nossa equipe de suporte está disponível para auxiliá-lo com dúvidas técnicas e operacionais. Entre em contato apenas por meio dos canais oficiais disponíveis na plataforma. Lembre-se: nunca solicitaremos suas senhas ou chaves privadas.</p>
+
+            <p><strong>12. Aceitação dos Termos</strong></p>
+            <p>Ao marcar a opção “Li e aceito os Termos de Uso” e clicar em “Aceitar e Continuar”, você declara ter lido, compreendido e concordado com todos os termos e condições aqui estabelecidos, bem como com a nossa Política de Privacidade.</p>
+            </div>
+            
+            <div class="terms-acceptance">
+                <label class="checkbox-container">
+                    <input type="checkbox" id="acceptTermsCheckbox">
+                    <span class="checkbox-label">Li e aceito os termos de uso da Nova-X</span>
+                </label>
+            </div>
+            
+            <div class="terms-actions">
+                <button class="btn-accept" id="acceptTermsBtn" disabled onclick="aceitarTermosNVX()">
+                    <ion-icon name="checkmark-circle"></ion-icon>
+                    Aceitar e Continuar
+                </button>
+            </div>
+            
+            <p class="terms-note">
+                <ion-icon name="warning"></ion-icon>
+                <strong>Importante:</strong> Você precisa aceitar os termos para utilizar a carteira NVX.
+            </p>
+        </div>
+    </div>
+</div>    <!-- SCRIPTS -->         
+    <script src="/dashboard/JS/pinManager.js"></script>
+    <script src="/dashboard/JS/nvxTerms.js"></script>          
+    <script src="/dashboard/JS/FunçõesAdicionaisDB.js"></script>
+    <script src="/dashboard/JS/chart.js"></script>
+    <script src="/dashboard/JS/dashboard.js"></script>
+    <script src="/dashboard/JS/lockSystem.js"></script>
+    <script src="/js/blockchain.js"></script>
+</body>
+</html>

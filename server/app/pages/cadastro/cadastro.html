@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro Nova-X</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+    <link rel="stylesheet" href="/cadastro/CSS/cadastro.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+</head>
+<body>
+    <!-- Caixa do formulário -->
+    <div class="box">
+        <form id="formulario">
+            <!-- Primeira etapa do cadastro -->
+            <fieldset id="primeira-etapa" class="ativa">
+                <!-- Logo -->
+                <div class="logo-container">
+                    <img src="/LogoFundo1.png" alt="Logo Nova-X" />
+                </div>
+                
+                <legend><b>Cadastro Nova-X</b></legend>
+                <p class="subtitle">Preencha seus dados para começar</p>
+                
+                <!-- Indicador de progresso -->
+                <div class="progress-indicator">
+                    <div class="progress-step active"></div>
+                    <div class="progress-step"></div>
+                </div>
+                
+                <!-- Nome completo -->
+                <div class="inputBox">
+                    <label for="nome"><i class="fas fa-user"></i> Nome Completo</label>
+                    <input type="text" id="nome" name="nome" class="inputUser" placeholder="Digite seu nome completo" required />
+                </div>
+                
+                <!-- Email -->
+                <div class="inputBox">
+                    <label for="email"><i class="fas fa-envelope"></i> E-mail</label>
+                    <input type="email" id="email" name="email" class="inputUser" placeholder="seu@email.com" required />
+                </div>
+                
+                <!-- Telefone -->
+                <div class="inputBox">
+                    <label for="telefone"><i class="fas fa-phone"></i> Telefone</label>
+                    <input type="tel" id="telefone" name="telefone" class="inputUser" placeholder="(00) 00000-0000" maxlength="15" required />
+                <div class="error-message" id="erro-telefone">Telefone inválido</div>
+                </div>
+                
+                <!-- CPF -->
+                <div class="inputBox">
+                    <label for="cpf"><i class="fas fa-id-card"></i> CPF</label>
+                    <input type="text" id="cpf" name="cpf" class="inputUser" placeholder="000.000.000-00" maxlength="14" required />
+                <div class="error-message" id="erro-cpf">CPF inválido</div>
+                </div>
+                
+                <!-- Gênero -->
+                <div class="inputBox sexoBox">
+                    <label for="genero"><i class="fas fa-venus-mars"></i> Gênero</label>
+                    <select id="genero" name="genero" required class="selectEstilizado">
+                        <option value="" disabled selected>Selecione seu gênero</option>
+                        <option value="feminino">Feminino</option>
+                        <option value="masculino">Masculino</option>
+                        <option value="outro">Outro</option>
+                        <option value="prefiro não dizer">Prefiro não dizer</option>
+                    </select>
+                </div>
+                
+                <!-- Data de nascimento -->
+                <div class="inputBox">
+                    <label for="data_nascimento"><i class="fas fa-calendar"></i> Data de Nascimento</label>
+                    <input type="date" id="data_nascimento" name="data_nascimento" required />
+                </div>
+                
+                <!-- CEP -->
+                <div class="inputBox">
+                    <label for="cep"><i class="fas fa-map-marker-alt"></i> CEP</label>
+                    <input type="text" id="cep" name="cep" class="inputUser" placeholder="00000-000" maxlength="9" required />
+                <div class="error-message" id="erro-cep">CEP inválido</div>
+                </div>
+                
+                <!-- Número e complemento -->
+                <div class="inputBox">
+                    <label for="numero"><i class="fas fa-home"></i> Número</label>
+                    <input type="text" id="numero" name="numero" class="inputUser" placeholder="123" required pattern=".*\d+.*"
+                    title='O campo "Número" deve conter pelo menos um número' />
+                </div>
+                
+                <div class="inputBox">
+                    <label for="complemento"><i class="fas fa-building"></i> Complemento</label>
+                    <input type="text" id="complemento" name="complemento" class="inputUser" placeholder="Apto, bloco, etc (opcional)" />
+                </div>
+                
+                <!-- Campos preenchidos automaticamente via CEP -->
+                <div class="inputBox address-row">
+                    <div class="address-field">
+                        <label for="estado"><i class="fas fa-map"></i> Estado</label>
+                        <input type="text" id="estado" name="estado" class="address-input address-input--state" readonly />
+                    </div>
+                    <div class="address-field">
+                        <label for="cidade"><i class="fas fa-city"></i> Cidade</label>
+                        <input type="text" id="cidade" name="cidade" class="address-input" readonly />
+                    </div>
+                    <div class="address-field">
+                        <label for="logradouro"><i class="fas fa-road"></i> Endereço</label>
+                        <input type="text" id="logradouro" name="logradouro" class="address-input" placeholder="Endereço" readonly />
+                    </div>
+                </div>
+                
+                <button type="button" onclick="mostrarSegundaEtapa()">
+                    Avançar <i class="fas fa-arrow-right"></i>
+                </button>
+                <button type="button" class="voltar-btn" onclick="window.location.href='/'">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </button>
+            </fieldset>
+            
+            <!-- Segunda etapa do cadastro: senha -->
+            <fieldset id="segunda-etapa">
+                <!-- Logo -->
+                <center>
+                    <img src="/LogoFundo1.png" alt="Logo Nova-X" width="50%" height="50%" />
+                </center>
+                
+                <legend><b>Cadastro Nova-X</b></legend>
+                <p class="subtitle">Crie uma senha segura</p>
+                
+                <!-- Indicador de progresso -->
+                <div class="progress-indicator">
+                    <div class="progress-step active"></div>
+                    <div class="progress-step active"></div>
+                </div>
+                
+                <!-- Senha -->
+                <div class="inputbox password-container">
+                    <label for="senha"><i class="fas fa-lock"></i> Senha</label>
+                    <input type="password" id="senha" name="senha" placeholder="Insira a senha" required />
+                    <i id="eye-icon-senha" class="fas fa-eye eye-icon" onclick="togglePasswordVisibility('senha')"></i>
+                </div>
+                
+                <!-- Confirmar senha -->
+                <div class="inputbox password-container">
+                    <label for="confirmar_senha"><i class="fas fa-lock"></i> Confirmar Senha</label>
+                    <input type="password" id="confirmar_senha" name="confirmar_senha" placeholder="Repita a senha" required />
+                    <i id="eye-icon-confirmar_senha" class="fas fa-eye eye-icon" onclick="togglePasswordVisibility('confirmar_senha')"></i>
+                </div>
+                <div class="error-message hidden" id="erro-senha">As senhas não coincidem</div>
+                <div class="error-message hidden" id="erro-requisitos">
+                    A senha deve conter maiúscula, minúscula, número, caractere especial e 8 caracteres
+                </div>
+                
+                <!-- Info de requisitos de senha -->
+                <div class="info-box">
+                    <strong>📋 Requisitos da senha:</strong>
+                    <ul>
+                        <li>Mínimo de 8 caracteres</li>
+                        <li>Pelo menos uma letra maiúscula</li>
+                        <li>Pelo menos uma letra minúscula</li>
+                        <li>Pelo menos um número</li>
+                        <li>Pelo menos um caractere especial (@$!%*?&)</li>
+                    </ul>
+                </div>
+                
+                <button type="submit">
+                    <i class="fas fa-check"></i> Cadastrar
+                </button>
+                <br>
+                <button type="button" class="voltar-etapa2-btn" onclick="voltarPrimeiraEtapa()">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </button>
+            </fieldset>
+        </form>
+    </div>
+    
+    <!-- FOOTER MELHORADO -->
+    <footer>
+        &copy; 2025 Nova-X. Todos os direitos reservados.
+    </footer>
+
+    
+    <!-- SEU JavaScript ORIGINAL - NÃO MEXA NELE! -->
+    <script src="/cadastro/JS/cadastro.js"></script>
+    <script src="/js/blockchain.js"></script>
+</body>
+</html>

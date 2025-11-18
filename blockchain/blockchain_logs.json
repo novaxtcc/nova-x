@@ -1,0 +1,28 @@
+[
+    {
+        "timestamp": "2025-11-08T18:03:05.037177",
+        "node": "ws://127.0.0.1",
+        "type": "COIN_OPERATION",
+        "status": "CREATE",
+        "details": {
+            "user_hash": "bbc5e661e106c6dc",
+            "operation": "CREATE",
+            "coins_count": 5,
+            "total_value": 5.0,
+            "max_supplies": 5
+        }
+    },
+    {
+        "timestamp": "2025-11-08T18:03:38.481709",
+        "node": "ws://127.0.0.1",
+        "type": "COIN_OPERATION",
+        "status": "CREATE",
+        "details": {
+            "user_hash": "bbc5e661e106c6dc",
+            "operation": "CREATE",
+            "coins_count": 5,
+            "total_value": 5.0,
+            "max_supplies": 5
+        }
+    }
+]

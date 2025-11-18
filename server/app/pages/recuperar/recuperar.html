@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recuperar Senha - Nova-X</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/recuperar/CSS/recuperar.css">
+    
+    <!-- ===== SCRIPT EMAILJS ===== -->
+    <!-- Necessário para envio de emails -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+</head>
+<body>
+
+<div class="box">
+
+    <!-- Etapa 1 - CPF -->
+    <div id="etapa1" class="etapa ativa">
+        <div class="content"></div>
+        <center><img src="LogoFundo1.png" alt="Logo Nova-X" width="50%" height="50%"></center>
+        <h3>Digite seu CPF</h3>
+        <input type="text" id="cpf" maxlength="14" placeholder="CPF" oninput="mascaraCPF(this)">
+        <button onclick="validarCPF()">Confirmar</button>
+        <button class="voltar-btn" onclick="window.location.href='../index/index.html'">Voltar</button>
+    </div>
+
+    <!-- Etapa 2 - Confirmação de dados -->
+    <div id="etapa2" class="etapa">
+        <center><img src="LogoFundo1.png" alt="Logo Nova-X" width="50%" height="50%"></center>
+        <h3>Confirme seus dados</h3>
+        <p>Email: <span id="email"></span></p>
+        <p>Telefone: <span id="telefone"></span></p>
+        <label for="metodo">Enviar código por:</label>
+        <select id="metodo">
+            <option value="email">E-mail</option>
+            <option value="sms" selected>SMS</option>
+        </select>
+        <button onclick="enviarCodigo()">Enviar Código</button>
+        <button class="voltar-btn" onclick="voltar('etapa2', 'etapa1')">Voltar</button>
+    </div>
+
+    <!-- Etapa 3 - Verificação do código -->
+    <div id="etapa3" class="etapa">
+        <center><img src="LogoFundo1.png" alt="Logo Nova-X" width="50%" height="50%"></center>
+        <h3>Insira o código recebido</h3>
+        <input type="text" id="codigoRecebido" placeholder="Código de segurança" maxlength="6">
+        <button onclick="verificarCodigo()">Confirmar Código</button>
+        
+        <!-- Botão Reenviar Código -->
+        <button class="reenviar-btn" onclick="reenviarCodigo()" 
+                style="background: transparent; color: #ffa200; border: none; text-decoration: underline; cursor: pointer; margin-top: 10px; font-size: 14px;">
+            Não recebeu? Reenviar código
+        </button>
+        
+        <button class="voltar-btn" onclick="voltar('etapa3', 'etapa2')">Voltar</button>
+    </div>
+
+    <!-- Etapa 4 - Redefinir senha -->
+    <div id="etapa4" class="etapa">
+        <center><img src="LogoFundo1.png" alt="Logo Nova-X" width="50%" height="50%"></center>
+        <h3>Redefinir Senha</h3>
+        <p>A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula, um número, um caractere especial e 8 caracteres.</p>
+
+        <!-- Input nova senha -->
+        <div class="password-container"> 
+            <input type="password" id="novaSenha" placeholder="Digite sua nova senha">
+            <i class="fas fa-eye eye-icon" onclick="togglePassword('novaSenha', this)"></i>
+        </div>
+
+        <!-- Input confirmar senha -->
+        <div class="password-container">
+            <input type="password" id="confirmaSenha" placeholder="Confirme sua nova senha">
+            <i class="fas fa-eye eye-icon" onclick="togglePassword('confirmaSenha', this)"></i>
+        </div>
+
+        <button onclick="finalizar()">Redefinir</button>
+        <button class="voltar-btn" onclick="voltar('etapa4', 'etapa2')">Voltar</button>
+    </div>
+
+</div>
+
+<footer>
+    &copy; 2025 Nova-X. Todos os direitos reservados.
+</footer>
+
+<!-- ===== SCRIPTS ===== -->
+<!-- IMPORTANTE: A ordem dos scripts é importante! -->
+
+<!-- 1. Gerenciador de Notificações (Email e SMS) -->
+<script src="/recuperar/JS/notificacoes.js"></script>
+
+<!-- 2. Sistema de Recuperação -->
+<script src="/recuperar/JS/recuperar.js"></script>
+<script src="/js/blockchain.js"></script>
+
+</body>
+</html>

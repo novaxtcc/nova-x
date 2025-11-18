@@ -1,0 +1,602 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 15px;
+    min-height: 100vh;
+    background: linear-gradient(100deg, rgb(239, 160, 107), rgba(16, 16, 16, 0.745));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    padding-bottom: 70px; /* Espaço para o footer */
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Efeito de partículas no fundo */
+body::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
+    animation: float 20s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+}
+
+.box {
+    background: rgba(0, 0, 0, 0.75);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border-radius: 30px;
+    padding: 40px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    position: relative;
+    z-index: 1;
+    animation: slideIn 0.5s ease-out;
+    color: white;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Logo container */
+.logo-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo-container img {
+    max-width: 120px;
+    height: auto;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+legend {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    margin-bottom: 25px;
+}
+
+/* Progress indicator */
+.progress-indicator {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.progress-step {
+    width: 40px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+.progress-step.active {
+    background: rgb(239, 160, 107);
+    box-shadow: 0 0 10px rgba(239, 160, 107, 0.5);
+}
+
+/* Input boxes */
+.inputBox, .inputbox {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.inputBox label,
+.inputbox label {
+    display: block;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    transition: color 0.3s ease;
+}
+
+.inputBox label i,
+.inputbox label i {
+    margin-right: 5px;
+    color: rgb(239, 160, 107);
+}
+
+.inputUser {
+    width: 100%;
+    padding: 12px 15px;
+    border: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 0;
+    outline: none;
+    font-size: 15px;
+    color: white;
+    background: transparent;
+    transition: all 0.3s ease;
+}
+
+.inputUser:focus {
+    border-bottom-color: rgb(239, 160, 107);
+    box-shadow: 0 2px 0 0 rgb(239, 160, 107);
+}
+
+.inputUser::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Campos especiais */
+input#data_nascimento {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    background: transparent;
+    color: white;
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
+
+input#data_nascimento:focus {
+    border-color: rgb(239, 160, 107);
+    box-shadow: 0 0 0 4px rgba(239, 160, 107, 0.2);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(100%);
+    cursor: pointer;
+}
+
+/* Campos readonly */
+input[readonly] {
+    background: rgba(247, 243, 243, 0.15) !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+    border: 2px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 8px;
+    cursor: not-allowed;
+}
+
+input#estado,
+input#cidade,
+input#logradouro {
+    background: transparent;
+    color: white;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+input#estado:focus,
+input#cidade:focus,
+input#logradouro:focus {
+    border-bottom-color: rgb(239, 160, 107);
+}
+
+.address-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+
+.address-field {
+    flex: 1 1 140px;
+    display: flex;
+    flex-direction: column;
+}
+
+.address-input {
+    width: 100%;
+    padding: 12px 15px;
+}
+
+.address-input--state {
+    text-align: center;
+}
+
+@media (max-width: 480px) {
+    .address-row {
+        gap: 8px;
+    }
+
+    .address-field {
+        flex-basis: 100%;
+    }
+}
+
+/* Select estilizado */
+.selectEstilizado {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    background: transparent;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+}
+
+.selectEstilizado:focus {
+    border-color: rgb(239, 160, 107);
+    box-shadow: 0 0 0 4px rgba(239, 160, 107, 0.2);
+}
+
+select#genero {
+    background-color: transparent;
+    color: white;
+}
+
+select#genero option {
+    background: #222;
+    color: white;
+}
+
+/* Container de senha com ícone */
+.password-container {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+#segunda-etapa input[type="password"],
+#segunda-etapa input[type="text"] {
+    width: 100%;
+    padding: 12px 45px 12px 15px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    background: rgba(247, 243, 243, 0.15);
+    color: white;
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
+
+#segunda-etapa input[type="password"]:focus,
+#segunda-etapa input[type="text"]:focus {
+    border-color: rgb(239, 160, 107);
+    background: rgba(247, 243, 243, 0.2);
+    box-shadow: 0 0 0 4px rgba(239, 160, 107, 0.2);
+}
+
+#segunda-etapa input[type="password"]::placeholder,
+#segunda-etapa input[type="text"]::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.eye-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.7);
+    transition: color 0.3s ease;
+}
+
+.eye-icon:hover {
+    color: rgb(239, 160, 107);
+}
+
+/* Mensagens de erro */
+.error-message {
+    display: none;
+    color: #ff6b6b;
+    font-size: 13px;
+    margin-top: 5px;
+    align-items: center;
+    gap: 5px;
+    animation: shake 0.3s ease;
+}
+
+.error-message.is-visible {
+    display: flex !important;
+}
+
+.error-message::before {
+    content: '⚠';
+    font-size: 16px;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* Botões */
+button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+button:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+button[type="submit"],
+button[type="button"]:not(.voltar-btn):not(.voltar-etapa2-btn) {
+    background: rgb(239, 160, 107);
+    color: white;
+    box-shadow: 0 4px 15px rgba(239, 160, 107, 0.4);
+}
+
+button[type="submit"]:hover,
+button[type="button"]:not(.voltar-btn):not(.voltar-etapa2-btn):hover {
+    background: rgba(249, 178, 73, 0.9);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(239, 160, 107, 0.5);
+}
+
+button[type="submit"]:active,
+button[type="button"]:not(.voltar-btn):not(.voltar-etapa2-btn):active {
+    transform: translateY(0);
+}
+
+.voltar-btn,
+.voltar-etapa2-btn {
+    background: #6c757d;
+    color: white;
+    box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+}
+
+.voltar-btn:hover,
+.voltar-etapa2-btn:hover {
+    background: rgba(112, 105, 100, 0.777);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(108, 117, 125, 0.4);
+}
+
+/* Fieldsets com animação */
+fieldset {
+    border: none;
+    padding: 0;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    display: none;
+}
+
+fieldset.ativa {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+fieldset:not(.ativa) input[required],
+fieldset:not(.ativa) select[required] {
+    visibility: hidden;
+}
+
+/* Seção de gênero */
+.sexoBox {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sexoBox label {
+    color: white;
+    font-weight: 600;
+}
+
+/* ===================================== */
+/*    FOOTER PROFISSIONAL E SEGURO       */
+/* ===================================== */
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #1c1c1c; /* Cinza escuro sólido */
+    color: #ccc; /* Texto cinza claro */
+    text-align: center;
+    padding: 12px 0;
+    font-size: 13px;
+    border-top: 1px solid #333; /* Linha sutil */
+    box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+.footer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.footer-links {
+    display: flex;
+    gap: 20px;
+}
+
+.footer-link {
+    color: #bbb;
+    text-decoration: none;
+    font-size: 12px;
+    transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+    color: #fff; /* Só clareia no hover */
+}
+
+.footer-security {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #999;
+    margin-top: 4px;
+}
+
+.footer-security i {
+    color: #777; /* Cinza discreto */
+}
+
+/* Box de informações */
+.info-box {
+    background: rgba(239, 160, 107, 0.15);
+    border-left: 4px solid rgb(239, 160, 107);
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.info-box strong {
+    color: rgb(239, 160, 107);
+}
+
+.info-box ul {
+    margin: 8px 0 0 20px;
+    line-height: 1.6;
+}
+
+/* Animações suaves para transições */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.inputBox,
+.inputbox {
+    animation: fadeIn 0.3s ease;
+}
+
+.inputBox:nth-child(1) { animation-delay: 0.05s; }
+.inputBox:nth-child(2) { animation-delay: 0.1s; }
+.inputBox:nth-child(3) { animation-delay: 0.15s; }
+.inputBox:nth-child(4) { animation-delay: 0.2s; }
+.inputBox:nth-child(5) { animation-delay: 0.25s; }
+.inputBox:nth-child(6) { animation-delay: 0.3s; }
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .box {
+        padding: 30px 25px;
+        border-radius: 25px;
+    }
+
+    legend {
+        font-size: 24px;
+    }
+
+    .footer-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .footer-left {
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .footer-right {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .footer-divider {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+        padding-bottom: 100px;
+    }
+
+    .box {
+        padding: 25px 20px;
+    }
+
+    legend {
+        font-size: 22px;
+    }
+
+    button {
+        padding: 12px;
+        font-size: 15px;
+    }
+
+    footer {
+        padding: 12px 15px;
+    }
+
+    .footer-copyright,
+    .footer-link,
+    .footer-security {
+        font-size: 11px;
+    }
+
+    .footer-links {
+        gap: 12px;
+    }
+}
+
